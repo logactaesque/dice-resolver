@@ -4,17 +4,20 @@ This service resolves which dice are to be employed when playing a Logactaesque 
 
 The application is a [Spring Boot](https://spring.io/projects/spring-boot) Java application. To run locally, clone the repository, navigate into the directory and then:
 
-
     # run the application on port 8080
     mvn spring-boot:run &
 
-The service presently holds a single endpoint called *resolve*, hence:
+The service presently holds a single endpoint called *resolve*, hence a GET on:
 
-    localhost:8080/resolve?homeTeam=Wolves&awayTeam=WBA
+    localhost:8080/resolve 
+
+with a JSON payload of: 
+
+    {"homeTeam":"Liverpool", "awayTeam":"West Bromwich Albion"}
 
 will return:
 
-    {"homeDice":"BLUE","awayDice":"RED"}
+    {"homeTeam":"Liverpool", "awayTeam":"West Bromwich Albion", "homeDice":"BLUE", "awayDice":"RED"}
 
 Hence for a given match, the _blue_ dice will be used to determine home goals, and _red_ for away.  If a home team and away team name are supplied, it will (for the moment) __always__ return the above JSON with a response code of 200, however in the near future the resolver will have additional logic to allow dice to be selected based upon:
 
