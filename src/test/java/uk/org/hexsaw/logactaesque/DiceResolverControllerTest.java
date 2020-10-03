@@ -38,6 +38,8 @@ public class DiceResolverControllerTest {
     private final String DEFAULT_HOME_DICE = "BLUE";
     private final String DEFAULT_AWAY_DICE = "RED";
     private final String JSON_WOLVES_VS_WBA = "{\"homeTeam\": \"Wolves\", \"awayTeam\": \"WBA\"}";
+    private final String JSON_MISSING_HOME_TEAM = "{\"homeTeam\": \"\", \"awayTeam\": \"WBA\"}";
+    private final String JSON_MISSING_AWAY_TEAM = "{\"homeTeam\": \"Wolves\", \"awayTeam\": \"\"}";
 
     @BeforeEach
     public void setUp() {
@@ -53,8 +55,7 @@ public class DiceResolverControllerTest {
     public void resolverReturnsCorrectDiceByDefault() throws Exception {
         ResultActions result = this.mockMvc.perform(get("/resolve").contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_WOLVES_VS_WBA))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(status().isOk());
 
                 String content = result.andReturn().getResponse().getContentAsString();
                 String homeTeam = JsonPath.read(content, "$.homeTeam");
@@ -67,5 +68,18 @@ public class DiceResolverControllerTest {
                 assertThat(awayDice, equalTo(DEFAULT_AWAY_DICE));
     }
 
+    @Test
+    public void resolverReturns400WhenHomeTeamMissingFromRequest() throws Exception {
+         this.mockMvc.perform(get("/resolve").contentType(MediaType.APPLICATION_JSON)
+                .content(JSON_MISSING_HOME_TEAM))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void resolverReturns400WhenAwayTeamMissingFromRequest() throws Exception {
+         this.mockMvc.perform(get("/resolve").contentType(MediaType.APPLICATION_JSON)
+                .content(JSON_MISSING_AWAY_TEAM))
+                .andExpect(status().isBadRequest());
+    }
     
 }
