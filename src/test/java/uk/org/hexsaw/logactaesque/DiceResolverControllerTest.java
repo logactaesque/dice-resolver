@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,10 +58,13 @@ public class DiceResolverControllerTest {
                 .andExpect(status().isOk());
 
                 String content = result.andReturn().getResponse().getContentAsString();
+                String when = JsonPath.read(content, "$.when");
                 String homeTeam = JsonPath.read(content, "$.homeTeam");
                 String awayTeam = JsonPath.read(content, "$.awayTeam");
                 String homeDice = JsonPath.read(content, "$.homeDice");
                 String awayDice = JsonPath.read(content, "$.awayDice");
+
+                assertThat(when,  notNullValue());
                 assertThat(homeTeam, equalTo(HOME_TEAM));
                 assertThat(awayTeam, equalTo(AWAY_TEAM));
                 assertThat(homeDice, equalTo(DEFAULT_HOME_DICE));

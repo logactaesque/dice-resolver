@@ -1,6 +1,10 @@
 package uk.org.hexsaw.logactaesque.model;
 
+import java.time.LocalDateTime;
+
 public class DiceResolved {
+
+    private LocalDateTime when;
 
     private String homeTeam;
     private String awayTeam;
@@ -12,6 +16,7 @@ public class DiceResolved {
     }
 
     public DiceResolved(String homeTeam, Dice homeDice, String awayTeam, Dice awayDice) {
+        this.when = LocalDateTime.now();
         this.homeTeam = homeTeam;
         this.homeDice = homeDice;
         this.awayTeam = awayTeam;
@@ -50,4 +55,11 @@ public class DiceResolved {
         this.awayDice = awayDice;
     }
 
+    public LocalDateTime getWhen() {
+        return when;
+    }
+
+    public void setWhen(LocalDateTime when) {
+        this.when = when;
+    }
 }
